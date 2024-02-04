@@ -19,75 +19,36 @@ import java.util.List;
 
 public class UniqueNumberSearchApp extends JFrame {
 
-//    public UniqueNumberSearchApp() throws SQLException {
-//        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//        setSize(600, 400);
-//        setTitle("Unique Number Search App");
-//        Connection conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/University", "postgres", "12345");
-//
-//        List<String> uniqueNumbers = new ArrayList<>();
-//        uniqueNumbers = UniqueNoFunction.getUniqueNumbers();
-//        List<String> tableNames = Arrays.asList("uniobject", "people", "documents", "materialmeans", "subdivisions", "employees", "students",
-//                "paperdocuments", "electronicdocuments", "movable", "immovable", "faculty", "department", "teachers", "technicalstaff", "textdocument", "multimediadocument");
-//
-//
-//        JPanel mainPanel = new JPanel();
-//        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-//        add(mainPanel);
-//        Map<String, String> data = new LinkedHashMap<>();
-//
-//        Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/University", "postgres", "12345");
-//
-//        for (String number : uniqueNumbers) {
-//            JPanel resultPanel = new JPanel();
-//            resultPanel.setLayout(new BoxLayout(resultPanel, BoxLayout.Y_AXIS));
-//            String name = "";
-//
-//            for (String tableName : tableNames) {
-//
-//                String sqlQuery = "SELECT * FROM " + tableName + " WHERE uniqueno =" + number + "";
-//
-//                PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
-//                ResultSet resultSet = preparedStatement.executeQuery();
-//                ResultSetMetaData metaData = resultSet.getMetaData();
-//
-//
-//
-//
-//
-//                if (resultSet.next()) {
-//                    resultPanel.add(new JLabel("Table: " + tableName));
-//                    name = tableName;
-//
-//                    for (int i = 1; i <= metaData.getColumnCount(); i++) {
-//
-//                        String columnName = metaData.getColumnName(i);
-//                        String value = resultSet.getString(i);
-//                        data.put(columnName, value);
-//                        resultPanel.add(new JLabel(columnName + ": " + value));
-//                    }
-//                }
-//
-//
-//
-//
-//            }
-////            System.out.println(name);
-////            data.forEach((key, value) -> {
-////                System.out.println(key + " :" + value);
-////                    });
-//            Border border = BorderFactory.createLineBorder(Color.BLACK, 1);
-//            resultPanel.setBorder(border);
-//            mainPanel.add(resultPanel);
-//            mainPanel.add(Box.createRigidArea(new Dimension(0, 10)));
-//        }
-//
-//
-//    }
+    public static List<String> getUniqueNumbers() {
+        List<String> uniqueNumbers = new ArrayList<>();
+
+        // З'єднання з базою даних
+        try (Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/University", "postgres", "12345")) {
+
+            // SQL-запит для отримання унікальних значень з колонки uniqueno
+            String sqlQuery = "SELECT DISTINCT uniqueno FROM uniobject";
+
+            try (PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery)) {
+                // Виконання SQL-запиту
+                try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                    // Додавання унікальних значень до масиву
+                    while (resultSet.next()) {
+                        String uniqueNo = resultSet.getString("uniqueno");
+                        uniqueNumbers.add(uniqueNo);
+                    }
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return uniqueNumbers;
+    }
 
     public static List<Uniobject> searchEntitiesInDatabase() throws SQLException {
         List<String> uniqueNumbers = new ArrayList<>();
-        uniqueNumbers = UniqueNoFunction.getUniqueNumbers();
+        uniqueNumbers = getUniqueNumbers();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
         List<Uniobject> uniobjects = new ArrayList<>();
@@ -113,9 +74,6 @@ public class UniqueNumberSearchApp extends JFrame {
                 ResultSetMetaData metaData = resultSet.getMetaData();
 
 
-
-
-
                 if (resultSet.next()) {
                     resultPanel.add(new JLabel("Table: " + tableName));
                     name = tableName;
@@ -130,11 +88,9 @@ public class UniqueNumberSearchApp extends JFrame {
                 }
 
 
-
-
             }
-//            System.out.println(name);
-            if (name.equals("faculty")){
+
+            if (name.equals("faculty")) {
                 Faculty faculty = new Faculty();
                 faculty.setId(Integer.valueOf(data.get("uniqueno")));
                 faculty.setObjname(data.get("objname"));
@@ -143,17 +99,16 @@ public class UniqueNumberSearchApp extends JFrame {
                 faculty.setFaclocation(data.get("faclocation"));
                 faculty.setChef(data.get("chef"));
                 uniobjects.add(faculty);
-            }
-            else if(name.equals("students")){
+            } else if (name.equals("students")) {
                 Student student = new Student();
                 student.setId(Integer.valueOf(data.get("uniqueno")));
                 student.setObjname(data.get("objname"));
                 student.setMajor(Integer.valueOf(data.get("major")));
                 student.setAveragemark(Float.valueOf(data.get("averagemark")));
                 student.setUnigroup(data.get("unigroup"));
-                if(data.get("practicalexperience") == null){
+                if (data.get("practicalexperience") == null) {
                     student.setPracticalexperience(null);
-                }else{
+                } else {
                     student.setPracticalexperience(Integer.parseInt(data.get("practicalexperience")));
                 }
 
@@ -165,8 +120,7 @@ public class UniqueNumberSearchApp extends JFrame {
                 student.setSex(data.get("sex"));
                 uniobjects.add(student);
 
-            }
-            else if(name.equals("department")){
+            } else if (name.equals("department")) {
                 Department department = new Department();
                 department.setId(Integer.valueOf(data.get("uniqueno")));
                 department.setObjname(data.get("objname"));
@@ -176,9 +130,6 @@ public class UniqueNumberSearchApp extends JFrame {
                 department.setTeachingfocus(data.get("teachingfocus"));
                 uniobjects.add(department);
             }
-//            data.forEach((key, value) -> {
-//                System.out.println(key + " :" + value);
-//            });
 
         }
         return uniobjects;
@@ -186,15 +137,9 @@ public class UniqueNumberSearchApp extends JFrame {
 
 
     public static void main(String[] args) throws SQLException {
-//        SwingUtilities.invokeLater(() -> {
-//            try {
-//                new UniqueNumberSearchApp().setVisible(true);
-//            } catch (SQLException e) {
-//                throw new RuntimeException(e);
-//            }
-//        });
+
         List<Uniobject> uniobjects = searchEntitiesInDatabase();
-        for(Uniobject uniobject: uniobjects){
+        for (Uniobject uniobject : uniobjects) {
             System.out.println(uniobject.getId());
             System.out.println(uniobject.getObjname());
             System.out.println(uniobject.getMajor());

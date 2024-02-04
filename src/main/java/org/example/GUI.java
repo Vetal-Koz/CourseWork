@@ -1,14 +1,16 @@
 package org.example;
 
 
-
-import org.example.entity.Uniobject;
+import org.example.entity.*;
+import org.example.frames.DepartmentFrame;
+import org.example.frames.FacultyFrame;
+import org.example.frames.StudentFrame;
 
 import javax.swing.*;
+import javax.swing.event.MouseInputAdapter;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreePath;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -19,7 +21,7 @@ import java.util.Map;
 public class GUI extends JFrame {
 
     private final List<Uniobject> uniobjectList;
-    private  Map<Integer, List<Uniobject>> majorMap;
+    private Map<Integer, List<Uniobject>> majorMap;
 
     public GUI(List<Uniobject> uniobjectList) {
         this.uniobjectList = uniobjectList;
@@ -32,93 +34,80 @@ public class GUI extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new FlowLayout());
 
-        // Створення інтерфейсу користувача для кожного об'єкта в списку
+
         for (Uniobject uniobject : uniobjectList) {
             if (uniobject.getMajor() == null || uniobject.getMajor() == 0) {
-                CustomTreeNode root = new CustomTreeNode("Root", createPanel(uniobject));
-
-//                List<Uniobject> relatedObjects = majorMap.get(uniobject.getId());
-//                for (Uniobject relatedObject : relatedObjects) {
-//                    JPanel node = createPanel(relatedObject);
-//                    CustomTreeNode node1 = new CustomTreeNode("node", node);
-//                    root.add(node1);
-//                }
-//                revalidate();
-                generateRelatedNode(uniobject, root);
-
+                CustomNode root = new CustomNode(uniobject);
 
                 JTree tree1 = new JTree(root);
-                tree1.setCellRenderer(new CustomTreeCellRenderer());
-                add(new JScrollPane(tree1));
+                tree1.addMouseListener(new MouseInputAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        if (SwingUtilities.isLeftMouseButton(e) && e.getClickCount() == 2) {
+
+                            TreePath path = tree1.getPathForLocation(e.getX(), e.getY());
+                            if (path != null) {
+                                if (path.getLastPathComponent() instanceof CustomNode) {
+                                    CustomNode newTree = (CustomNode) path.getLastPathComponent();
+                                    generateRelatedNode(newTree.getUniobject(), (CustomNode) path.getLastPathComponent());
+                                }
+                            }
+                        } else if (SwingUtilities.isLeftMouseButton(e) && e.getClickCount() == 3) {
+                            TreePath path = tree1.getPathForLocation(e.getX(), e.getY());
+                            if (path != null) {
+                                if (path.getLastPathComponent() instanceof CustomNode) {
+                                    CustomNode newTree = (CustomNode) path.getLastPathComponent();
+                                    showInfo(newTree.getUniobject());
+                                }
+                            }
+                        }
+                    }
+                });
+                JScrollPane scrollPane = new JScrollPane(tree1);
+
+                scrollPane.setPreferredSize(new Dimension(1000, 800));
+
+                add(scrollPane);
+
             }
         }
+
+        setSize(800, 600);
+
+        setMinimumSize(new Dimension(1000, 1000));
 
         pack();
         setLocationRelativeTo(null);
         setVisible(true);
     }
 
-    private void generateRelatedNode(Uniobject uniobject,CustomTreeNode root){
+    private void showInfo(Uniobject uniobject) {
+        if (uniobject instanceof Faculty) {
+            SwingUtilities.invokeLater(() -> new FacultyFrame((Faculty) uniobject));
+
+        } else if (uniobject instanceof Student) {
+            SwingUtilities.invokeLater(() -> new StudentFrame((Student) uniobject));
+        } else if (uniobject instanceof Department) {
+            SwingUtilities.invokeLater(() -> new DepartmentFrame((Department) uniobject));
+        }
+    }
+
+    private void generateRelatedNode(Uniobject uniobject, DefaultMutableTreeNode root) {
         List<Uniobject> relatedObjects = majorMap.get(uniobject.getId());
         for (Uniobject relatedObject : relatedObjects) {
-            JPanel node = createPanel(relatedObject);
-            CustomTreeNode node1 = new CustomTreeNode("node", node);
+            CustomNode node1 = new CustomNode(relatedObject);
             root.add(node1);
-            generateRelatedNode(relatedObject, node1);
+
         }
         revalidate();
-    }
-    private JButton createButton(Uniobject uniobject) {
-        JButton button = new JButton("Object " + uniobject.getId());
-        button.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // При натисканні на кнопку виводимо інші об'єкти з відповідним major
-                List<Uniobject> relatedObjects = majorMap.get(uniobject.getId());
-                displayRelatedObjects(relatedObjects);
-            }
-        });
-        return button;
-    }
-
-    private void displayRelatedObjects(List<Uniobject> relatedObjects) {
-        // Вивід інших об'єктів
-        for (Uniobject relatedObject : relatedObjects) {
-            add(createPanel(relatedObject));
-        }
-        revalidate();
-    }
-    private JPanel createPanel(Uniobject uniobject) {
-        JPanel panel = new JPanel(new GridLayout(3, 2));
-        panel.setBorder(BorderFactory.createTitledBorder("Object " + uniobject.getId()));
-
-        panel.add(new JLabel("ID: "));
-        panel.add(new JLabel(String.valueOf(uniobject.getId())));
-        panel.add(new JLabel("Object Name: "));
-        panel.add(new JLabel(uniobject.getObjname()));
-        panel.add(new JLabel("Major: "));
-        panel.add(new JLabel(String.valueOf(uniobject.getMajor())));
-
-        addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                // Код, який виконується при натисканні на панель
-                System.out.println("Панель була натиснута!");
-                List<Uniobject> relatedObjects = majorMap.get(uniobject.getId());
-//                displayRelatedObjects(relatedObjects);
-                relatedObjects.clear();
-            }
-        });
-
-        return panel;
     }
 
     public Map<Integer, List<Uniobject>> groupByMajor(List<Uniobject> uniobjects) {
         Map<Integer, List<Uniobject>> majorMap = new HashMap<>();
-        for(int i=0; i<uniobjects.size(); i++){
+        for (int i = 0; i < uniobjects.size(); i++) {
             List<Uniobject> relatedObj = new ArrayList<>();
-            for (int j=0; j<uniobjects.size(); j++){
-                if(uniobjects.get(i).getId().equals(uniobjects.get(j).getMajor())){
+            for (int j = 0; j < uniobjects.size(); j++) {
+                if (uniobjects.get(i).getId().equals(uniobjects.get(j).getMajor())) {
                     relatedObj.add(uniobjects.get(j));
                 }
             }
@@ -133,7 +122,7 @@ public class GUI extends JFrame {
         SwingUtilities.invokeLater(() -> new GUI(uniobjectList));
         Map newMap = new GUI(uniobjectList).groupByMajor(uniobjectList);
 
-        newMap.forEach( (k,v) -> System.out.println("Key: " + k + ": Value: " + v));
+        newMap.forEach((k, v) -> System.out.println("Key: " + k + ": Value: " + v));
 
     }
 }
