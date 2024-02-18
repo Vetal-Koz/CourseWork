@@ -10,6 +10,8 @@ public class Uniobject {
 
     private Integer major;
 
+    private Integer classId;
+
     public Integer getId() {
         return id;
     }
@@ -34,4 +36,21 @@ public class Uniobject {
         this.major = major;
     }
 
+    public Integer getClassId() {
+        return classId;
+    }
+
+    public void setClassId(Integer classId) {
+        this.classId = classId;
+    }
+
+    @Override
+    public String toString() {
+        return "Uniobject{" +
+                "id=" + id +
+                ", objname='" + objname + '\'' +
+                ", major=" + major +
+                ", classId=" + classId +
+                '}';
+    }
 }
