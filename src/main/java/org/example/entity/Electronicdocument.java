@@ -1,6 +1,7 @@
 package org.example.entity;
 
 
+import java.time.Instant;
 
 public class Electronicdocument extends Document{
 
@@ -13,6 +14,12 @@ public class Electronicdocument extends Document{
 
     private Boolean docsecurity = false;
 
+    public Electronicdocument(Integer id, String objname, Integer major, Integer classId, String theme, Instant createddate, String doclanguage, String format, Float docsize, Boolean docsecurity) {
+        super(id, objname, major, classId, theme, createddate, doclanguage);
+        this.format = format;
+        this.docsize = docsize;
+        this.docsecurity = docsecurity;
+    }
 
     public String getFormat() {
         return format;

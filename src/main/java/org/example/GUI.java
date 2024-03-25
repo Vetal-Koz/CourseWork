@@ -118,7 +118,7 @@ public class GUI extends JFrame {
 
     public static void main(String[] args) throws SQLException {
         // Припустимо, у вас є список об'єктів Uniobject
-        List<Uniobject> uniobjectList = UniqueNumberSearchApp.searchEntitiesInDatabase();
+        List<Uniobject> uniobjectList = new ArrayList<>();
         SwingUtilities.invokeLater(() -> new GUI(uniobjectList));
         Map newMap = new GUI(uniobjectList).groupByMajor(uniobjectList);
 

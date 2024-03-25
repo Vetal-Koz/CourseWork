@@ -13,6 +13,13 @@ public class Materialmean extends Uniobject{
 
     private Float meancost;
 
+    public Materialmean(Integer id, String objname, Integer major, Integer classId, Integer amount, String physicalcondition, Float meancost) {
+        super(id, objname, major, classId);
+        this.amount = amount;
+        this.physicalcondition = physicalcondition;
+        this.meancost = meancost;
+    }
+
     public Integer getAmount() {
         return amount;
     }

@@ -13,6 +13,12 @@ public class Document extends Uniobject{
 
     private String doclanguage;
 
+    public Document(Integer id, String objname, Integer major, Integer classId, String theme, Instant createddate, String doclanguage) {
+        super(id, objname, major, classId);
+        this.theme = theme;
+        this.createddate = createddate;
+        this.doclanguage = doclanguage;
+    }
 
     public String getTheme() {
         return theme;

@@ -1,6 +1,7 @@
 package org.example.entity;
 
 
+import java.time.LocalDateTime;
 
 public class Teacher extends Employee{
 
@@ -12,6 +13,12 @@ public class Teacher extends Employee{
 
     private Float rating;
 
+    public Teacher(Integer id, String objname, Integer major, Integer classId, LocalDateTime dateofbirth, String sex, String nationality, Float salary, String education, Float experience, String subject, String academictitles, Float rating) {
+        super(id, objname, major, classId, dateofbirth, sex, nationality, salary, education, experience);
+        this.subject = subject;
+        this.academictitles = academictitles;
+        this.rating = rating;
+    }
 
     public String getSubject() {
         return subject;

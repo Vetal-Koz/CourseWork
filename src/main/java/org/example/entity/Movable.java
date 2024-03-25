@@ -15,6 +15,12 @@ public class Movable extends Materialmean{
     private Float repaircost;
 
 
+    public Movable(Integer id, String objname, Integer major, Integer classId, Integer amount, String physicalcondition, Float meancost, Integer servicelife, String specifications, Float repaircost) {
+        super(id, objname, major, classId, amount, physicalcondition, meancost);
+        this.servicelife = servicelife;
+        this.specifications = specifications;
+        this.repaircost = repaircost;
+    }
 
     public Integer getServicelife() {
         return servicelife;

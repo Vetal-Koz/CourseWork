@@ -3,7 +3,9 @@ package org.example;
 import org.example.entity.*;
 import org.example.frames.DepartmentFrame;
 import org.example.frames.FacultyFrame;
+import org.example.frames.PeopleFrame;
 import org.example.frames.StudentFrame;
+import org.example.util.UniobjectUtil;
 
 import javax.swing.*;
 import javax.swing.event.MouseInputAdapter;
@@ -20,11 +22,9 @@ import java.util.Map;
 public class NewGUI extends JFrame {
 
     private final List<Uniobject> uniobjectList;
-    private Map<Integer, List<Uniobject>> majorMap;
 
     public NewGUI(List<Uniobject> uniobjectList) {
         this.uniobjectList = uniobjectList;
-        this.majorMap = groupByMajor(uniobjectList);
         initUI();
     }
 
@@ -56,12 +56,8 @@ public class NewGUI extends JFrame {
                             if (path != null) {
                                 if (path.getLastPathComponent() instanceof CustomNode) {
                                     CustomNode newTree = (CustomNode) path.getLastPathComponent();
-                                    try {
-                                        Uniobject fillObject = UniqueNumberSearchApp.fillUniObjWithData(newTree.getUniobject());
-                                        showInfo(fillObject);
-                                    } catch (SQLException ex) {
-                                        throw new RuntimeException(ex);
-                                    }
+                                    Uniobject fillObject = UniobjectUtil.generateClassByUniobj(newTree.getUniobject());
+                                    showInfo(fillObject);
                                 }
                             }
                         }
@@ -94,12 +90,16 @@ public class NewGUI extends JFrame {
         } else if (uniobject instanceof Department) {
             SwingUtilities.invokeLater(() -> new DepartmentFrame((Department) uniobject));
         }
+        else if (uniobject instanceof People) {
+            SwingUtilities.invokeLater(() -> new PeopleFrame((People) uniobject));
+        }
     }
 
     private void generateRelatedNode(Uniobject uniobject, DefaultMutableTreeNode root) {
          try {
              List<Uniobject> relatedObjects = UniqueNumberSearchApp.searchRelativeObjectsToObjectByMajor(uniobject);
             for (Uniobject relatedObject : relatedObjects) {
+                System.out.println(relatedObject);
                 CustomNode node1 = new CustomNode(relatedObject);
                 root.add(node1);
             }

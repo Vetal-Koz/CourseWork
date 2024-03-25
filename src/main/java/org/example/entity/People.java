@@ -1,13 +1,13 @@
 package org.example.entity;
 
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+
 import java.time.Instant;
 import java.time.LocalDateTime;
-
+@NoArgsConstructor
+@ToString(callSuper = true)
 public class People extends Uniobject{
-
-
-
-
     private LocalDateTime dateofbirth;
 
 
@@ -16,7 +16,12 @@ public class People extends Uniobject{
 
     private String nationality;
 
-
+    public People(Integer id, String objname, Integer major, Integer classId, LocalDateTime dateofbirth, String sex, String nationality) {
+        super(id, objname, major, classId);
+        this.dateofbirth = dateofbirth;
+        this.sex = sex;
+        this.nationality = nationality;
+    }
 
     public LocalDateTime getDateofbirth() {
         return dateofbirth;

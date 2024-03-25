@@ -1,6 +1,9 @@
 package org.example.entity;
 
 
+import lombok.ToString;
+
+@ToString(callSuper = true)
 
 public class Faculty extends Subdivision{
 
@@ -11,6 +14,11 @@ public class Faculty extends Subdivision{
 
     private String faclocation;
 
+    public Faculty(Integer id, String objname, Integer major, Integer classId, String chef, String curricula, String faclocation) {
+        super(id, objname, major, classId, chef);
+        this.curricula = curricula;
+        this.faclocation = faclocation;
+    }
 
     public String getCurricula() {
         return curricula;

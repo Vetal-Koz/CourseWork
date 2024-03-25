@@ -1,7 +1,9 @@
 package org.example.entity;
 
 
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
 public class Uniobject {
 
     private Integer id;
@@ -11,6 +13,13 @@ public class Uniobject {
     private Integer major;
 
     private Integer classId;
+
+    public Uniobject(Integer id, String objname, Integer major, Integer classId) {
+        this.id = id;
+        this.objname = objname;
+        this.major = major;
+        this.classId = classId;
+    }
 
     public Integer getId() {
         return id;

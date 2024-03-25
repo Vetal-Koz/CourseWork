@@ -14,7 +14,12 @@ public class Immovable extends Materialmean{
 
     private String functionalpurpose;
 
-
+    public Immovable(Integer id, String objname, Integer major, Integer classId, Integer amount, String physicalcondition, Float meancost, Float area, String adress, String functionalpurpose) {
+        super(id, objname, major, classId, amount, physicalcondition, meancost);
+        this.area = area;
+        this.adress = adress;
+        this.functionalpurpose = functionalpurpose;
+    }
 
     public Float getArea() {
         return area;

@@ -1,7 +1,13 @@
 package org.example.entity;
 
 
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
+import java.time.LocalDateTime;
+
+@NoArgsConstructor
+@ToString(callSuper = true)
 public class Student extends People{
 
 
@@ -13,6 +19,12 @@ public class Student extends People{
 
     private Integer practicalexperience;
 
+    public Student(Integer id, String objname, Integer major, Integer classId, LocalDateTime dateofbirth, String sex, String nationality, Float averagemark, String unigroup, Integer practicalexperience) {
+        super(id, objname, major, classId, dateofbirth, sex, nationality);
+        this.averagemark = averagemark;
+        this.unigroup = unigroup;
+        this.practicalexperience = practicalexperience;
+    }
 
     public Float getAveragemark() {
         return averagemark;
