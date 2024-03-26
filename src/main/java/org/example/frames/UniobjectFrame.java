@@ -9,7 +9,7 @@ import java.awt.*;
 public class UniobjectFrame extends JFrame {
 
     private Uniobject uniobject;
-    protected JPanel panel = new JPanel(new GridLayout(10, 2));
+    protected JPanel panel = new JPanel(new GridLayout(6, 2));
 
     public UniobjectFrame(Uniobject uniobject) {
         this.uniobject = uniobject;

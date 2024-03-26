@@ -19,7 +19,10 @@ public class PeopleFrame extends UniobjectFrame {
     }
 
     private void initComponents() {
-
+        super.panel.remove(0);
+        super.panel.remove(0);
+        super.panel.remove(2);
+        super.panel.remove(2);
 
         super.panel.add(new JLabel("Date of Birth:"));
         super.panel.add(new JLabel(people.getDateofbirth().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))));

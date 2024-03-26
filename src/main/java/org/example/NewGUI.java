@@ -1,10 +1,7 @@
 package org.example;
 
 import org.example.entity.*;
-import org.example.frames.DepartmentFrame;
-import org.example.frames.FacultyFrame;
-import org.example.frames.PeopleFrame;
-import org.example.frames.StudentFrame;
+import org.example.frames.*;
 import org.example.util.UniobjectUtil;
 
 import javax.swing.*;
@@ -57,10 +54,21 @@ public class NewGUI extends JFrame {
                                 if (path.getLastPathComponent() instanceof CustomNode) {
                                     CustomNode newTree = (CustomNode) path.getLastPathComponent();
                                     Uniobject fillObject = UniobjectUtil.generateClassByUniobj(newTree.getUniobject());
-                                    showInfo(fillObject);
+                                    UniobjectFrame uniobjectFrame = UniobjectUtil.generateFrameForUniObj(fillObject);
+                                }
+                            }
+                        } else if (SwingUtilities.isRightMouseButton(e)) {
+                            TreePath path = tree1.getPathForLocation(e.getX(), e.getY());
+                            if (path != null) {
+                                if (path.getLastPathComponent() instanceof CustomNode) {
+                                    CustomNode newTree = (CustomNode) path.getLastPathComponent();
+                                    Uniobject fillObject = UniobjectUtil.generateClassByUniobj(newTree.getUniobject());
+                                    PopUpMenu popUpMenu = new PopUpMenu();
+                                    popUpMenu.show(e.getComponent(), e.getX(), e.getY());
                                 }
                             }
                         }
+
                     }
                 });
                 JScrollPane scrollPane = new JScrollPane(tree1);
@@ -81,19 +89,7 @@ public class NewGUI extends JFrame {
         setVisible(true);
     }
 
-    private void showInfo(Uniobject uniobject) {
-        if (uniobject instanceof Faculty) {
-            SwingUtilities.invokeLater(() -> new FacultyFrame((Faculty) uniobject));
 
-        } else if (uniobject instanceof Student) {
-            SwingUtilities.invokeLater(() -> new StudentFrame((Student) uniobject));
-        } else if (uniobject instanceof Department) {
-            SwingUtilities.invokeLater(() -> new DepartmentFrame((Department) uniobject));
-        }
-        else if (uniobject instanceof People) {
-            SwingUtilities.invokeLater(() -> new PeopleFrame((People) uniobject));
-        }
-    }
 
     private void generateRelatedNode(Uniobject uniobject, DefaultMutableTreeNode root) {
          try {

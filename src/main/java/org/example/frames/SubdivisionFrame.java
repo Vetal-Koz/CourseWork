@@ -20,7 +20,10 @@ public class SubdivisionFrame extends UniobjectFrame {
 
     private void initComponents() {
 
-
+        super.panel.remove(0);
+        super.panel.remove(0);
+        super.panel.remove(2);
+        super.panel.remove(2);
         super.panel.add(new JLabel("Chef:"));
         super.panel.add(new JLabel(subdivision.getChef()));
 
