@@ -18,7 +18,9 @@ import java.util.Map;
 
 public class NewGUI extends JFrame {
 
-    private final List<Uniobject> uniobjectList;
+    private List<Uniobject> uniobjectList;
+
+    private JScrollPane scrollPane;
 
     public NewGUI(List<Uniobject> uniobjectList) {
         this.uniobjectList = uniobjectList;
@@ -63,15 +65,16 @@ public class NewGUI extends JFrame {
                                 if (path.getLastPathComponent() instanceof CustomNode) {
                                     CustomNode newTree = (CustomNode) path.getLastPathComponent();
                                     Uniobject fillObject = UniobjectUtil.generateClassByUniobj(newTree.getUniobject());
-                                    PopUpMenu popUpMenu = new PopUpMenu();
+                                    PopUpMenu popUpMenu = new PopUpMenu(fillObject);
                                     popUpMenu.show(e.getComponent(), e.getX(), e.getY());
+
                                 }
                             }
                         }
 
                     }
                 });
-                JScrollPane scrollPane = new JScrollPane(tree1);
+                this.scrollPane = new JScrollPane(tree1);
 
                 scrollPane.setPreferredSize(new Dimension(1000, 800));
 
@@ -89,7 +92,12 @@ public class NewGUI extends JFrame {
         setVisible(true);
     }
 
+    public void repaintTree() throws SQLException {
+        this.dispose();
+        List<Uniobject> uniobjectsList = UniqueNumberSearchApp.searchInstanceWithMajorNull();
+        SwingUtilities.invokeLater(() -> new NewGUI(uniobjectsList));
 
+    }
 
     private void generateRelatedNode(Uniobject uniobject, DefaultMutableTreeNode root) {
          try {
@@ -125,9 +133,6 @@ public class NewGUI extends JFrame {
         // Припустимо, у вас є список об'єктів Uniobject
         List<Uniobject> uniobjectList = UniqueNumberSearchApp.searchInstanceWithMajorNull();
         SwingUtilities.invokeLater(() -> new NewGUI(uniobjectList));
-        Map newMap = new NewGUI(uniobjectList).groupByMajor(uniobjectList);
-
-        newMap.forEach((k, v) -> System.out.println("Key: " + k + ": Value: " + v));
 
     }
 }

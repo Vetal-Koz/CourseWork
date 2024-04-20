@@ -1,5 +1,7 @@
 package org.example;
 
+import org.example.config.JdbcService;
+import org.example.config.impl.PostgresJdbcService;
 import org.example.entity.*;
 
 import javax.swing.*;
@@ -137,11 +139,86 @@ public class UniqueNumberSearchApp extends JFrame {
         }
     }
 
+    public static Integer getTheBiggestIdFromUniobj(){
+        try (PreparedStatement ps = connection.prepareStatement("select max(uniqueno) from uniobject")){
+            ResultSet resultSet = ps.executeQuery();
+            Integer maxId = null;
+            if (resultSet.next()){
+                maxId = resultSet.getInt(1);
+            }
+            return maxId;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static String getFrameNameForUniObjectByClassId(int classId){
+        try (PreparedStatement ps = connection.prepareStatement("select classes.class_form from classes where class_id = ?")){
+            ps.setInt(1, classId);
+            ResultSet resultSet = ps.executeQuery();
+            String form = "";
+            if (resultSet.next()){
+                form = resultSet.getString(1);
+            }
+            return form;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static List<String> getRelatedClassesById(Long id) {
+        JdbcService jdbcService = new PostgresJdbcService();
+        List<String> classes = new ArrayList<>();
+
+        try {
+
+
+            PreparedStatement preparedStatement = jdbcService.getConnection().prepareStatement("select c.class_name from class_relations inner join public.classes c on c.class_id = class_relations.child_class_id where parent_class_id = ?");
+            preparedStatement.setLong(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                classes.add(resultSet.getString(1));
+            }
+            return classes;
+        }catch (SQLException e){
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void deleteObjectById(Integer id){
+        JdbcService jdbcService = new PostgresJdbcService();
+        try {
+
+            for (int i = 0; i < TABLE_NAME.size(); i++) {
+                PreparedStatement preparedStatement = jdbcService.getConnection().prepareStatement("delete from " + TABLE_NAME.get(i) + " where uniqueno = ?");
+                preparedStatement.setInt(1, id);
+                preparedStatement.executeUpdate();
+            }
+
+        }catch (SQLException e){
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static Integer getClassIdByName(String name) {
+        JdbcService jdbcService = new PostgresJdbcService();
+        PreparedStatement preparedStatement = null;
+        try {
+            preparedStatement = jdbcService.getConnection().prepareStatement("select class_id from classes where class_name = ?");
+            preparedStatement.setString(1, name);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()){
+                return resultSet.getInt(1);
+            }
+            else {
+                throw new RuntimeException("Such class do not exist");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
     public static void main(String[] args) throws SQLException {
 
-        Uniobject uniobject = new Uniobject(10, "Melnyk Ostap", 6, 3);
-
-        getNameOfClassUniObj(uniobject);
-        System.out.println(getFrameNameForUniObject(uniobject));
     }
 }

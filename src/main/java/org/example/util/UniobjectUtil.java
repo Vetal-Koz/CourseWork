@@ -1,8 +1,10 @@
 package org.example.util;
 
 import org.example.UniqueNumberSearchApp;
+import org.example.createFrame.UniObjectFrameCreate;
 import org.example.entity.Uniobject;
 import org.example.frames.UniobjectFrame;
+import org.example.updateFrame.UniObjectFrameUpdate;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -63,6 +65,32 @@ public class UniobjectUtil {
             Class<?> c = Class.forName(fullPathToClass);
             Constructor constructor = c.getConstructor(uniobject.getClass());
             return (E) constructor.newInstance(uniobject);
+        } catch (ClassNotFoundException | NoSuchMethodException | InstantiationException | IllegalAccessException |
+                 InvocationTargetException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static <E extends UniObjectFrameUpdate> E generateFrameUpdateForUniObj(Uniobject uniobject){
+        String className = UniqueNumberSearchApp.getFrameNameForUniObject(uniobject);
+        String fullPathToClass = "org.example.updateFrame." + className + "Update";
+        try {
+            Class<?> c = Class.forName(fullPathToClass);
+            Constructor constructor = c.getConstructor(uniobject.getClass());
+            return (E) constructor.newInstance(uniobject);
+        } catch (ClassNotFoundException | NoSuchMethodException | InstantiationException | IllegalAccessException |
+                 InvocationTargetException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static <E extends UniObjectFrameCreate> E generateFrameCreate(Integer classId, Integer major){
+        String className = UniqueNumberSearchApp.getFrameNameForUniObjectByClassId(classId);
+        String fullPathToClass = "org.example.createFrame." + className + "Create";
+        try {
+            Class<?> c = Class.forName(fullPathToClass);
+            Constructor constructor = c.getConstructor(Integer.class, Integer.class);
+            return (E) constructor.newInstance(classId, major);
         } catch (ClassNotFoundException | NoSuchMethodException | InstantiationException | IllegalAccessException |
                  InvocationTargetException e) {
             throw new RuntimeException(e);
