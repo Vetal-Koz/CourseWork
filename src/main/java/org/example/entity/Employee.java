@@ -1,8 +1,11 @@
 package org.example.entity;
 
 
+import org.example.anotation.Table;
+
 import java.time.LocalDateTime;
 
+@Table(name = "employees")
 public class Employee extends People{
 
     private Float salary;
@@ -40,6 +43,12 @@ public class Employee extends People{
 
     public void setExperience(Float experience) {
         this.experience = experience;
+    }
+
+
+    @Override
+    public String toString() {
+        return super.getObjname();
     }
 
 }

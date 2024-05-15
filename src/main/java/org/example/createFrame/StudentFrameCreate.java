@@ -1,7 +1,6 @@
 package org.example.createFrame;
 
-import org.example.UniqueNumberSearchApp;
-import org.example.entity.Student;
+import org.example.dao.UniobjectDao;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -43,7 +42,7 @@ public class StudentFrameCreate extends PeopleFrameCreate{
             @Override
             public void actionPerformed(ActionEvent e) {
                 try (PreparedStatement ps = jdbcService.getConnection().prepareStatement("insert into students values (?,?,?,?)")){
-                    ps.setInt(1, UniqueNumberSearchApp.getTheBiggestIdFromUniobj()+1);
+                    ps.setInt(1, UniobjectDao.getTheBiggestIdFromUniobj()+1);
                     ps.setFloat(2, Float.parseFloat(averageMarkField.getText()));
                     ps.setString(3, unigroupField.getText());
                     ps.setInt(4, Integer.parseInt(practicalExperienceField.getText()));

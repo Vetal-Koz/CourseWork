@@ -6,7 +6,6 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.JTableHeader;
 import java.awt.*;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 
@@ -69,6 +68,7 @@ public class StudentFrame extends PeopleFrame {
 
         title = new JLabel();
         title.setText("Особовий Листок з Обліку Кадрів");
+        title.setFont(new Font("Arial", 100, 25));
         title.setFont(title.getFont().deriveFont(100 ,25));
         title.setBounds(20,0, widthOfFrame, 40);
         titlePanel.add(title);
@@ -231,10 +231,11 @@ public class StudentFrame extends PeopleFrame {
         frame.add(mainPanel);
         frame.add(tablePanel);
         frame.add(footPanel);
-
+        frame.setLocationRelativeTo(null);
         super.setVisible(false);
         super.removeAll();
         super.repaint();
+
     }
 
 
@@ -258,13 +259,5 @@ public class StudentFrame extends PeopleFrame {
             }
             return this;
         }
-    }
-    public static void main(String[] args) {
-        Student student = new Student();
-        student.setObjname("Melnyk Ostap");
-        student.setSex("m");
-        LocalDateTime dateTime = LocalDateTime.now();
-        student.setDateofbirth(dateTime);
-        SwingUtilities.invokeLater(() -> new StudentFrame(student));
     }
 }

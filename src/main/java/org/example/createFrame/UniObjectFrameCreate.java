@@ -1,10 +1,9 @@
 package org.example.createFrame;
 
-import org.example.NewGUI;
-import org.example.UniqueNumberSearchApp;
+import org.example.dao.UniobjectDao;
 import org.example.config.JdbcService;
 import org.example.config.impl.PostgresJdbcService;
-import org.example.entity.Uniobject;
+
 
 import javax.swing.*;
 import java.awt.*;
@@ -21,12 +20,13 @@ public class UniObjectFrameCreate extends JFrame {
 
     protected JTextField idField;
     protected JPanel panel = new JPanel(new GridLayout(10, 2));
-    protected JButton saveButton;
+    public JButton saveButton = new JButton("Save");
 
     public UniObjectFrameCreate(Integer classId, Integer major ) {
 
         this.classId = classId;
         this.major = major;
+
 
         setTitle("Uniobject Details");
         setSize(400, 300);
@@ -48,7 +48,7 @@ public class UniObjectFrameCreate extends JFrame {
         idField = new JTextField(String.valueOf(0));
         idField.setEditable(true); // Make it uneditable
         panel.add(idField);
-
+        panel.setBackground(new Color(204,153,255));
         panel.add(new JLabel("Object Name:"));
         JTextField nameField = new JTextField("");
         nameField.setEditable(true); // Make it uneditable
@@ -60,7 +60,6 @@ public class UniObjectFrameCreate extends JFrame {
         panel.add(majorField);
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        this.saveButton = new JButton("Save");
         saveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -71,7 +70,7 @@ public class UniObjectFrameCreate extends JFrame {
 
 
                 try (PreparedStatement ps = jdbcService.getConnection().prepareStatement("INSERT INTO uniobject values (?, ?, ?, ?)")){
-                    ps.setInt(1, UniqueNumberSearchApp.getTheBiggestIdFromUniobj()+1);
+                    ps.setInt(1, UniobjectDao.getTheBiggestIdFromUniobj()+1);
                     ps.setString(2, nameField.getText());
                     ps.setInt(3, Integer.parseInt(majorField.getText()));
                     ps.setInt(4, classId);
@@ -82,22 +81,12 @@ public class UniObjectFrameCreate extends JFrame {
                     throw new RuntimeException(ex);
                 }
 
-                Window window = Window.getWindows()[0];
-                if (window instanceof NewGUI) {
-                    NewGUI frame = (NewGUI) window;
-                    try {
-                        frame.repaintTree();
-                    } catch (SQLException ex) {
-                        throw new RuntimeException(ex);
-                    }
-                }
                 dispose();
-
             }
         });
         buttonPanel.add(saveButton);
-
-        JButton cancelButton = new JButton("Cancel");
+        buttonPanel.setBackground(new Color(224,224,224));
+        JButton cancelButton = createButton("Cancel");
         cancelButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -110,5 +99,9 @@ public class UniObjectFrameCreate extends JFrame {
         mainPanel.add(buttonPanel, BorderLayout.SOUTH);
 
         add(mainPanel);
+    }
+
+    private JButton createButton(String text){
+        return new JButton(text);
     }
 }

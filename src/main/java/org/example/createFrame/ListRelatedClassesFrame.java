@@ -1,12 +1,18 @@
 package org.example.createFrame;
 
-import org.example.UniqueNumberSearchApp;
+import lombok.Getter;
+import lombok.Setter;
+import org.example.dao.UniobjectDao;
+import org.example.entity.Uniobject;
 import org.example.util.UniobjectUtil;
 
 import javax.swing.*;
+import javax.swing.tree.DefaultMutableTreeNode;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,22 +20,35 @@ public class ListRelatedClassesFrame extends JFrame {
 
     private Integer major;
     private JList<String> list;
+
+    public JButton btnSave;
+    @Setter
+    @Getter
+    private List<Uniobject> relatedUniobjects = new ArrayList<>();
     private DefaultListModel<String> listModel;
 
-    public ListRelatedClassesFrame(List<String> relatedClasses, Integer major) {
+    private List<String> relatedClasses;
+
+    public UniObjectFrameCreate createFrame;
+
+    public ListRelatedClassesFrame(Integer major, DefaultMutableTreeNode node) {
         setTitle("List Frame");
         setSize(300, 200);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setLocationRelativeTo(null);
         this.major = major;
-        // Creating a list model and populating it with elements
+        if (major == 0){
+            relatedClasses = UniobjectDao.getAllClasses();
+        }
+
+        if (node.getUserObject() instanceof Uniobject) {
+            relatedClasses = UniobjectDao.getRelatedClassesById(((Uniobject) node.getUserObject()).getClassId());
+        }
         listModel = new DefaultListModel<>();
 
         for (String element : relatedClasses) {
             listModel.addElement(element);
         }
-
-        // Creating a JList with the populated list model
         list = new JList<>(listModel);
 
 
@@ -37,7 +56,7 @@ public class ListRelatedClassesFrame extends JFrame {
         add(scrollPane, BorderLayout.CENTER);
 
         // Creating buttons
-        JButton btnSave = new JButton("Save");
+        JButton btnSave = createButton("Choose");
         btnSave.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -45,13 +64,24 @@ public class ListRelatedClassesFrame extends JFrame {
                 Integer classId;
 
                 if (selectedValue != null) {
-                    classId = UniqueNumberSearchApp.getClassIdByName(selectedValue);
-                    UniobjectUtil.generateFrameCreate(classId, major).setVisible(true);
-                    JOptionPane.showMessageDialog(ListRelatedClassesFrame.this,
-                            "Selected Element: " + selectedValue + " id: " + classId,
-                            "Selected Element",
-                            JOptionPane.INFORMATION_MESSAGE);
-                    dispose();
+                    classId = UniobjectDao.getClassIdByName(selectedValue);
+                    createFrame = UniobjectUtil.generateFrameCreate(classId, major);
+                    createFrame.addWindowListener(new WindowAdapter() {
+                        @Override
+                        public void windowClosed(WindowEvent e) {
+                            List<Uniobject> uniobjectList = generateRelatedNode(node);
+                            for (Uniobject uniobject : uniobjectList) {
+
+                                relatedUniobjects.add(uniobject);
+                            }
+                            // This method will be called when the frame is closed
+                            System.out.println("Create frame closed");
+                            dispose();
+                            // You can perform any actions you need here
+                        }
+                    });
+                    createFrame.setVisible(true);
+
                 } else {
                     JOptionPane.showMessageDialog(ListRelatedClassesFrame.this,
                             "Please select an element first.",
@@ -62,7 +92,7 @@ public class ListRelatedClassesFrame extends JFrame {
             }
         });
 
-        JButton btnClose = new JButton("Close");
+        JButton btnClose = createButton("Close");
         btnClose.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -79,5 +109,88 @@ public class ListRelatedClassesFrame extends JFrame {
         add(buttonPanel, BorderLayout.SOUTH);
     }
 
+
+    public ListRelatedClassesFrame(Integer major) {
+        setTitle("List Frame");
+        setSize(300, 200);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setLocationRelativeTo(null);
+        this.major = major;
+        if (major == 0){
+            relatedClasses = UniobjectDao.getAllClasses();
+        }
+
+        listModel = new DefaultListModel<>();
+
+        for (String element : relatedClasses) {
+            listModel.addElement(element);
+        }
+        list = new JList<>(listModel);
+
+
+        JScrollPane scrollPane = new JScrollPane(list);
+        add(scrollPane, BorderLayout.CENTER);
+
+        // Creating buttons
+        btnSave = createButton("Choose");
+        btnSave.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String selectedValue = list.getSelectedValue();
+                Integer classId;
+
+                if (selectedValue != null) {
+                    classId = UniobjectDao.getClassIdByName(selectedValue);
+                    createFrame = UniobjectUtil.generateFrameCreate(classId, major);
+                    createFrame.addWindowListener(new WindowAdapter() {
+                        @Override
+                        public void windowClosed(WindowEvent e) {
+                            // This method will be called when the frame is closed
+                            System.out.println("Create frame closed");
+                            dispose();
+                            // You can perform any actions you need here
+                        }
+                    });
+                    createFrame.setVisible(true);
+
+                } else {
+                    JOptionPane.showMessageDialog(ListRelatedClassesFrame.this,
+                            "Please select an element first.",
+                            "No Element Selected",
+                            JOptionPane.WARNING_MESSAGE);
+                }
+
+            }
+        });
+
+        JButton btnClose = createButton("Close");
+        btnClose.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose(); // Close the frame
+            }
+        });
+
+        // Adding buttons to a panel
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.add(btnSave);
+        buttonPanel.add(btnClose);
+
+        // Adding the button panel to the frame
+        add(buttonPanel, BorderLayout.SOUTH);
+    }
+
+    private List<Uniobject> generateRelatedNode(DefaultMutableTreeNode node) {
+        Object obj = node.getUserObject();
+        List<Uniobject> relatedObjects = new ArrayList<>();
+        if (obj instanceof Uniobject) {
+            relatedObjects = UniobjectDao.searchRelativeObjectsToObjectByMajor((Uniobject) obj);
+        }
+        return relatedObjects;
+    }
+
+    private JButton createButton(String text){
+        return new JButton(text);
+    }
 
 }

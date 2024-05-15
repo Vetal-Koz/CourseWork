@@ -1,8 +1,11 @@
 package org.example.entity;
 
 
+import org.example.anotation.Table;
+
 import java.time.Instant;
 
+@Table(name = "paperdocuments")
 public class Paperdocument extends Document{
 
 
@@ -31,6 +34,11 @@ public class Paperdocument extends Document{
 
     public void setArchiving(Boolean archiving) {
         this.archiving = archiving;
+    }
+
+    @Override
+    public String toString() {
+        return super.getObjname();
     }
 
 }

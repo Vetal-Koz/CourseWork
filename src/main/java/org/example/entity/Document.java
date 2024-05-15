@@ -1,8 +1,11 @@
 package org.example.entity;
 
 
+import org.example.anotation.Table;
+
 import java.time.Instant;
 
+@Table(name = "documents")
 public class Document extends Uniobject{
 
     private String theme;
@@ -44,4 +47,8 @@ public class Document extends Uniobject{
         this.doclanguage = doclanguage;
     }
 
+    @Override
+    public String toString() {
+        return super.getObjname();
+    }
 }

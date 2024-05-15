@@ -2,6 +2,7 @@ package org.example.updateFrame;
 
 import org.example.config.JdbcService;
 import org.example.entity.Subdivision;
+import org.example.style.CustomTextField;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,7 +14,7 @@ import java.sql.SQLException;
 
 public class SubdivisionFrameUpdate extends UniObjectFrameUpdate {
     private Subdivision subdivision;
-    private JTextField chefField;
+    private CustomTextField chefField;
 
 
     public SubdivisionFrameUpdate(Subdivision subdivision) {
@@ -31,7 +32,7 @@ public class SubdivisionFrameUpdate extends UniObjectFrameUpdate {
         super.panel.remove(2);
 
         super.panel.add(new JLabel("Chef:"));
-        chefField = new JTextField(subdivision.getChef());
+        chefField = new CustomTextField(subdivision.getChef());
         chefField.setEditable(true); // Make it editable
         super.panel.add(chefField);
 

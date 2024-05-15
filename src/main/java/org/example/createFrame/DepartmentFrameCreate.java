@@ -1,7 +1,6 @@
 package org.example.createFrame;
 
-import org.example.UniqueNumberSearchApp;
-import org.example.entity.Department;
+import org.example.dao.UniobjectDao;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -37,7 +36,7 @@ public class DepartmentFrameCreate extends SubdivisionFrameCreate{
             @Override
             public void actionPerformed(ActionEvent e) {
                 try (PreparedStatement ps = jdbcService.getConnection().prepareStatement("INSERT INTO department values (?,?,?)")){
-                    ps.setInt(1, UniqueNumberSearchApp.getTheBiggestIdFromUniobj()+1);
+                    ps.setInt(1, UniobjectDao.getTheBiggestIdFromUniobj()+1);
                     ps.setString(2, teachingFocus.getText());
                     ps.setFloat(3, Float.parseFloat(budget.getText()));
                     ps.executeUpdate();

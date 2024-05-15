@@ -1,10 +1,9 @@
 package org.example.entity;
 
 
-import lombok.ToString;
+import org.example.anotation.Table;
 
-@ToString(callSuper = true)
-
+@Table(name = "subdivisions")
 public class Subdivision extends Uniobject{
 
 
@@ -24,4 +23,9 @@ public class Subdivision extends Uniobject{
         this.chef = chef;
     }
 
+
+    @Override
+    public String toString() {
+        return super.getObjname();
+    }
 }

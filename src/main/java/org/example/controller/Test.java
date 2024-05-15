@@ -1,4 +1,4 @@
-package org.example;
+package org.example.controller;
 
 import org.example.config.JdbcService;
 import org.example.config.impl.PostgresJdbcService;
@@ -18,15 +18,11 @@ import java.util.List;
 
 public class Test {
     public static void main(String[] args) throws ClassNotFoundException, SQLException {
-//        List<Uniobject> list = UniqueNumberSearchApp.searchInstanceWithMajorNull();
-//        Uniobject obj = UniobjectUtil.generateClassByUniobj(list.get(0));
-//        System.out.println(obj);
-//        UniobjectUtil.generateFrameUpdateForUniObj(obj).setVisible(true);
-//
-//
-//
-//
-//        Faculty faculty = new Faculty(1,"Faculty", 3, 2, "chef", "TEa", "address");
+        Department student = new Department(1,"s",3,1,"s", "d", 3F);
+        List<String> names = UniobjectUtil.getAllTablesNameRelatedToUniobj(student).reversed();
+        for (String name: names){
+            System.out.println(name);
+        }
 
 
 

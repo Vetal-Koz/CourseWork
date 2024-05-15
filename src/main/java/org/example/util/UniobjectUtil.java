@@ -1,6 +1,7 @@
 package org.example.util;
 
-import org.example.UniqueNumberSearchApp;
+import org.example.dao.UniobjectDao;
+import org.example.anotation.Table;
 import org.example.createFrame.UniObjectFrameCreate;
 import org.example.entity.Uniobject;
 import org.example.frames.UniobjectFrame;
@@ -9,7 +10,6 @@ import org.example.updateFrame.UniObjectFrameUpdate;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -17,7 +17,7 @@ import java.util.Map;
 public class UniobjectUtil {
 
     public static <E extends Uniobject> E generateClassByUniobj(Uniobject uniobject) {
-        String className = UniqueNumberSearchApp.getNameOfClassUniObj(uniobject);
+        String className = UniobjectDao.getNameOfClassUniObj(uniobject);
         String fullPathToClass = "org.example.entity." + className;
         try {
             List<Class<?>> classes = new ArrayList<>();
@@ -36,14 +36,12 @@ public class UniobjectUtil {
                 }
             }
             List<Object> objectsList = new ArrayList<>();
-            Constructor<?> constructor = c.getConstructor(getParameterTypes(UniqueNumberSearchApp.mapForFillUniobj(uniobject)));
-            UniqueNumberSearchApp.mapForFillUniobj(uniobject).forEach((k, v) -> {
+            Constructor<?> constructor = c.getConstructor(getParameterTypes(UniobjectDao.mapForFillUniobj(uniobject)));
+            UniobjectDao.mapForFillUniobj(uniobject).forEach((k, v) -> {
                 System.out.println("key: "+ k);
                 System.out.println("value: " + v);
                 objectsList.add(v);
             });
-
-
 
             Object[] arr = objectsList.toArray();
             return (E) constructor.newInstance(arr);
@@ -52,14 +50,64 @@ public class UniobjectUtil {
 
         }catch (ClassNotFoundException | NoSuchMethodException | InvocationTargetException | InstantiationException| IllegalAccessException e){
             throw new RuntimeException(e);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
         }
 
     }
 
+    public static List<String> getAllTablesNameRelatedToUniobj(Uniobject uniobject) {
+        List<String> tablesName = new ArrayList<>();
+        Class<?> concreteClass = getUnioBjectClass(uniobject);
+        tablesName.add(getNameOfTableByClass(concreteClass));
+        while (concreteClass.getSuperclass() != Object.class){
+            concreteClass = concreteClass.getSuperclass();
+            tablesName.add(getNameOfTableByClass(concreteClass));
+        }
+        return tablesName;
+    }
+
+    public static List<String> getAllTablesNameRelatedToUniobjById(Integer uniobjectId) {
+        List<String> tablesName = new ArrayList<>();
+        Class<?> concreteClass = getUnioBjectClassById(uniobjectId);
+        tablesName.add(getNameOfTableByClass(concreteClass));
+        while (concreteClass.getSuperclass() != Object.class){
+            concreteClass = concreteClass.getSuperclass();
+            tablesName.add(getNameOfTableByClass(concreteClass));
+        }
+        return tablesName;
+    }
+
+    public static String getNameOfTableByClass(Class<?> concreteClass){
+        Table[] annotationsByType = concreteClass.getAnnotationsByType(Table.class);
+        if (annotationsByType[0] != null){
+            return annotationsByType[0].name();
+        }
+        else {
+            throw new RuntimeException("Such anotations do not exist");
+        }
+    }
+
+    private static Class<?> getUnioBjectClass(Uniobject uniobject){
+        String className = UniobjectDao.getNameOfClassUniObj(uniobject);
+        String fullPathToClass = "org.example.entity." + className;
+        try {
+            return Class.forName(fullPathToClass);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static Class<?> getUnioBjectClassById(Integer uniobjectId){
+        String className = UniobjectDao.getNameOfClassUniObjById(uniobjectId);
+        String fullPathToClass = "org.example.entity." + className;
+        try {
+            return Class.forName(fullPathToClass);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public static <E extends UniobjectFrame> E generateFrameForUniObj(Uniobject uniobject){
-        String className = UniqueNumberSearchApp.getFrameNameForUniObject(uniobject);
+        String className = UniobjectDao.getFrameNameForUniObject(uniobject);
         String fullPathToClass = "org.example.frames." + className;
         try {
             Class<?> c = Class.forName(fullPathToClass);
@@ -72,7 +120,7 @@ public class UniobjectUtil {
     }
 
     public static <E extends UniObjectFrameUpdate> E generateFrameUpdateForUniObj(Uniobject uniobject){
-        String className = UniqueNumberSearchApp.getFrameNameForUniObject(uniobject);
+        String className = UniobjectDao.getFrameNameForUniObject(uniobject);
         String fullPathToClass = "org.example.updateFrame." + className + "Update";
         try {
             Class<?> c = Class.forName(fullPathToClass);
@@ -85,7 +133,7 @@ public class UniobjectUtil {
     }
 
     public static <E extends UniObjectFrameCreate> E generateFrameCreate(Integer classId, Integer major){
-        String className = UniqueNumberSearchApp.getFrameNameForUniObjectByClassId(classId);
+        String className = UniobjectDao.getFrameNameForUniObjectByClassId(classId);
         String fullPathToClass = "org.example.createFrame." + className + "Create";
         try {
             Class<?> c = Class.forName(fullPathToClass);

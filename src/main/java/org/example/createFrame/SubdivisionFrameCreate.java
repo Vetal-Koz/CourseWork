@@ -1,7 +1,6 @@
 package org.example.createFrame;
 
-import org.example.UniqueNumberSearchApp;
-import org.example.entity.Subdivision;
+import org.example.dao.UniobjectDao;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -38,7 +37,7 @@ public class SubdivisionFrameCreate extends UniObjectFrameCreate{
             @Override
             public void actionPerformed(ActionEvent e) {
                 try (PreparedStatement ps = jdbcService.getConnection().prepareStatement("INSERT into subdivisions values (?, ?)")) {
-                    ps.setInt(1, UniqueNumberSearchApp.getTheBiggestIdFromUniobj()+1);
+                    ps.setInt(1, UniobjectDao.getTheBiggestIdFromUniobj()+1);
                     ps.setString(2, chefField.getText());
                     ps.executeUpdate();
                 } catch (SQLException ex) {

@@ -1,6 +1,7 @@
 package org.example.updateFrame;
 
 import org.example.entity.Department;
+import org.example.style.CustomTextField;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -11,7 +12,7 @@ import java.sql.SQLException;
 public class DepartmentFrameUpdate extends SubdivisionFrameUpdate{
 
     private Department department;
-    private JTextField teachingFocus, budget;
+    private CustomTextField teachingFocus, budget;
 
     public DepartmentFrameUpdate(Department department) {
         super(department);
@@ -25,12 +26,12 @@ public class DepartmentFrameUpdate extends SubdivisionFrameUpdate{
     private void initComponents() {
 
         super.panel.add(new JLabel("Teaching focus:"));
-        teachingFocus = new JTextField(department.getTeachingfocus());
+        teachingFocus = new CustomTextField(department.getTeachingfocus());
         teachingFocus.setEditable(true); // Make it editable
         super.panel.add(teachingFocus);
 
         super.panel.add(new JLabel("Budget:"));
-        budget = new JTextField(department.getBudget().toString());
+        budget = new CustomTextField(department.getBudget().toString());
         budget.setEditable(true); // Make it editable
         super.panel.add(budget);
 

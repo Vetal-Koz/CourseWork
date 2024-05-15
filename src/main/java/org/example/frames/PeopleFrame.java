@@ -24,14 +24,14 @@ public class PeopleFrame extends UniobjectFrame {
         super.panel.remove(2);
         super.panel.remove(2);
 
-        super.panel.add(new JLabel("Date of Birth:"));
-        super.panel.add(new JLabel(people.getDateofbirth().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))));
+        super.panel.add(generateLabel("Date of Birth:"));
+        super.panel.add(generateValueLabel(people.getDateofbirth().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))));
 
-        super.panel.add(new JLabel("Sex:"));
-        super.panel.add(new JLabel(people.getSex()));
+        super.panel.add(generateLabel("Sex:"));
+        super.panel.add(generateValueLabel(people.getSex()));
 
-        super.panel.add(new JLabel("Nationality:"));
-        super.panel.add(new JLabel(people.getNationality()));
+        super.panel.add(generateLabel("Nationality:"));
+        super.panel.add(generateValueLabel(people.getNationality()));
 
 
     }

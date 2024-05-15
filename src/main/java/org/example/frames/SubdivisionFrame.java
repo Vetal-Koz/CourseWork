@@ -24,8 +24,8 @@ public class SubdivisionFrame extends UniobjectFrame {
         super.panel.remove(0);
         super.panel.remove(2);
         super.panel.remove(2);
-        super.panel.add(new JLabel("Chef:"));
-        super.panel.add(new JLabel(subdivision.getChef()));
+        super.panel.add(this.generateLabel("Chef:"));
+        super.panel.add(this.generateValueLabel(subdivision.getChef()));
 
 
     }

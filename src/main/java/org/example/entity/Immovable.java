@@ -1,7 +1,9 @@
 package org.example.entity;
 
 
+import org.example.anotation.Table;
 
+@Table(name = "immovable")
 public class Immovable extends Materialmean{
 
 
@@ -43,6 +45,11 @@ public class Immovable extends Materialmean{
 
     public void setFunctionalpurpose(String functionalpurpose) {
         this.functionalpurpose = functionalpurpose;
+    }
+
+    @Override
+    public String toString() {
+        return super.getObjname();
     }
 
 }

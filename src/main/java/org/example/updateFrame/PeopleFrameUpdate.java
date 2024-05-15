@@ -2,6 +2,7 @@ package org.example.updateFrame;
 
 
 import org.example.entity.People;
+import org.example.style.CustomTextField;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -15,7 +16,7 @@ public class PeopleFrameUpdate extends UniObjectFrameUpdate {
 
 
     private People people;
-    private JTextField dateOfBirthField, sexField, nationalityField;
+    private CustomTextField dateOfBirthField, sexField, nationalityField;
 
     public PeopleFrameUpdate(People people) {
         super(people);
@@ -33,17 +34,17 @@ public class PeopleFrameUpdate extends UniObjectFrameUpdate {
         super.panel.remove(2);
 
         super.panel.add(new JLabel("Date of Birth:"));
-        dateOfBirthField = new JTextField(people.getDateofbirth().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+        dateOfBirthField = new CustomTextField(people.getDateofbirth().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
         dateOfBirthField.setEditable(true); // Make it editable
         super.panel.add(dateOfBirthField);
 
         super.panel.add(new JLabel("Sex:"));
-        sexField = new JTextField(people.getSex());
+        sexField = new CustomTextField(people.getSex());
         sexField.setEditable(true); // Make it editable
         super.panel.add(sexField);
 
         super.panel.add(new JLabel("Nationality:"));
-        nationalityField = new JTextField(people.getNationality());
+        nationalityField = new CustomTextField(people.getNationality());
         nationalityField.setEditable(true); // Make it editable
         super.panel.add(nationalityField);
 

@@ -1,7 +1,9 @@
 package org.example.entity;
 
 
+import org.example.anotation.Table;
 
+@Table(name = "movable")
 public class Movable extends Materialmean{
 
 
@@ -44,6 +46,11 @@ public class Movable extends Materialmean{
 
     public void setRepaircost(Float repaircost) {
         this.repaircost = repaircost;
+    }
+
+    @Override
+    public String toString() {
+        return super.getObjname();
     }
 
 }

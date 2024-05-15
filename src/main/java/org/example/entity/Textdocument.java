@@ -1,8 +1,11 @@
 package org.example.entity;
 
 
+import org.example.anotation.Table;
+
 import java.time.Instant;
 
+@Table(name = "textdocument")
 public class Textdocument extends Electronicdocument{
 
 
@@ -32,6 +35,12 @@ public class Textdocument extends Electronicdocument{
 
     public void setTextstructure(String textstructure) {
         this.textstructure = textstructure;
+    }
+
+
+    @Override
+    public String toString() {
+        return super.getObjname();
     }
 
 }

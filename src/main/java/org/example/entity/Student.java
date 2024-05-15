@@ -2,12 +2,12 @@ package org.example.entity;
 
 
 import lombok.NoArgsConstructor;
-import lombok.ToString;
+import org.example.anotation.Table;
 
 import java.time.LocalDateTime;
 
 @NoArgsConstructor
-@ToString(callSuper = true)
+@Table(name = "students")
 public class Student extends People{
 
 
@@ -48,6 +48,12 @@ public class Student extends People{
 
     public void setPracticalexperience(Integer practicalexperience) {
         this.practicalexperience = practicalexperience;
+    }
+
+
+    @Override
+    public String toString() {
+        return super.getObjname();
     }
 
 }

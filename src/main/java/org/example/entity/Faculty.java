@@ -1,10 +1,9 @@
 package org.example.entity;
 
 
-import lombok.ToString;
+import org.example.anotation.Table;
 
-@ToString(callSuper = true)
-
+@Table(name = "faculty")
 public class Faculty extends Subdivision{
 
 
@@ -34,6 +33,11 @@ public class Faculty extends Subdivision{
 
     public void setFaclocation(String faclocation) {
         this.faclocation = faclocation;
+    }
+
+    @Override
+    public String toString() {
+        return super.getObjname();
     }
 
 }

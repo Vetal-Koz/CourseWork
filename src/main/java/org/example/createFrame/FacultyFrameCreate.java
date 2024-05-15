@@ -1,6 +1,6 @@
 package org.example.createFrame;
 
-import org.example.UniqueNumberSearchApp;
+import org.example.dao.UniobjectDao;
 
 
 import javax.swing.*;
@@ -37,7 +37,7 @@ public class FacultyFrameCreate extends SubdivisionFrameCreate {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try (PreparedStatement ps = jdbcService.getConnection().prepareStatement("INSERT INTO faculty values (?,?,?)")){
-                    ps.setInt(1, UniqueNumberSearchApp.getTheBiggestIdFromUniobj()+1);
+                    ps.setInt(1, UniobjectDao.getTheBiggestIdFromUniobj()+1);
                     ps.setString(2, facultyLocation.getText());
                     ps.setString(3, curricula.getText());
                     ps.executeUpdate();

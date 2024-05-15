@@ -15,11 +15,11 @@ public class FacultyFrame extends SubdivisionFrame {
     }
 
     private void initComponents() {
-        super.panel.add(new JLabel("Faculty Location:"));
-        super.panel.add(new JLabel(faculty.getFaclocation()));
+        super.panel.add(generateLabel("Faculty Location:"));
+        super.panel.add(generateValueLabel(faculty.getFaclocation()));
 
-        super.panel.add(new JLabel("Curricula:"));
-        super.panel.add(new JLabel(faculty.getCurricula()));
+        super.panel.add(generateLabel("Curricula:"));
+        super.panel.add(generateValueLabel(faculty.getCurricula()));
 
 
     }

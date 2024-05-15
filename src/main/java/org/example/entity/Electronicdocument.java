@@ -1,8 +1,11 @@
 package org.example.entity;
 
 
+import org.example.anotation.Table;
+
 import java.time.Instant;
 
+@Table(name = "electronicdocuments")
 public class Electronicdocument extends Document{
 
 
@@ -43,6 +46,11 @@ public class Electronicdocument extends Document{
 
     public void setDocsecurity(Boolean docsecurity) {
         this.docsecurity = docsecurity;
+    }
+
+    @Override
+    public String toString() {
+        return super.getObjname();
     }
 
 }

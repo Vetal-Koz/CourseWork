@@ -1,12 +1,11 @@
 package org.example.entity;
 
 import lombok.NoArgsConstructor;
-import lombok.ToString;
+import org.example.anotation.Table;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
 @NoArgsConstructor
-@ToString(callSuper = true)
+@Table(name = "people")
 public class People extends Uniobject{
     private LocalDateTime dateofbirth;
 
@@ -45,6 +44,12 @@ public class People extends Uniobject{
 
     public void setNationality(String nationality) {
         this.nationality = nationality;
+    }
+
+
+    @Override
+    public String toString() {
+        return super.getObjname();
     }
 
 }

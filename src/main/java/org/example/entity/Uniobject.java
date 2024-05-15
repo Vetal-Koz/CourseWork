@@ -2,8 +2,10 @@ package org.example.entity;
 
 
 import lombok.NoArgsConstructor;
+import org.example.anotation.Table;
 
 @NoArgsConstructor
+@Table(name="uniobject")
 public class Uniobject {
 
     private Integer id;
@@ -55,11 +57,6 @@ public class Uniobject {
 
     @Override
     public String toString() {
-        return "Uniobject{" +
-                "id=" + id +
-                ", objname='" + objname + '\'' +
-                ", major=" + major +
-                ", classId=" + classId +
-                '}';
+        return objname;
     }
 }

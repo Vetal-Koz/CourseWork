@@ -15,10 +15,10 @@ public class DepartmentFrame extends SubdivisionFrame {
     }
 
     private void initComponents() {
-        super.panel.add(new JLabel("Budget:"));
-        super.panel.add(new JLabel(String.valueOf(department.getBudget())));
+        super.panel.add(generateLabel("Budget:"));
+        super.panel.add(generateValueLabel(String.valueOf(department.getBudget())));
 
-        super.panel.add(new JLabel("Teaching Focus:"));
-        super.panel.add(new JLabel(department.getTeachingfocus()));
+        super.panel.add(generateLabel("Teaching focus"));
+        super.panel.add(generateValueLabel(department.getTeachingfocus()));
     }
 }

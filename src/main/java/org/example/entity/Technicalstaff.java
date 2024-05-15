@@ -1,8 +1,11 @@
 package org.example.entity;
 
 
+import org.example.anotation.Table;
+
 import java.time.LocalDateTime;
 
+@Table(name = "technicalstaff")
 public class Technicalstaff extends Employee{
 
 
@@ -32,4 +35,8 @@ public class Technicalstaff extends Employee{
         this.jobposition = jobposition;
     }
 
+    @Override
+    public String toString() {
+        return super.getObjname();
+    }
 }

@@ -1,7 +1,9 @@
 package org.example.entity;
 
 
+import org.example.anotation.Table;
 
+@Table(name = "materialmeans")
 public class Materialmean extends Uniobject{
 
 
@@ -42,6 +44,12 @@ public class Materialmean extends Uniobject{
 
     public void setMeancost(Float meancost) {
         this.meancost = meancost;
+    }
+
+
+    @Override
+    public String toString() {
+        return super.getObjname();
     }
 
 }

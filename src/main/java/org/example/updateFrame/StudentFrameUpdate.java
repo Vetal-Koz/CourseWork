@@ -1,18 +1,18 @@
 package org.example.updateFrame;
 
 import org.example.entity.Student;
+import org.example.style.CustomTextField;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 
 public class StudentFrameUpdate extends PeopleFrameUpdate{
 
     private Student student;
-    private JTextField unigroupField, averageMarkField, practicalExperienceField;
+    private CustomTextField unigroupField, averageMarkField, practicalExperienceField;
 
     public StudentFrameUpdate(Student student) {
         super(student);
@@ -26,17 +26,21 @@ public class StudentFrameUpdate extends PeopleFrameUpdate{
     private void initComponents() {
 
         super.panel.add(new JLabel("Unigroup:"));
-        unigroupField = new JTextField(student.getUnigroup());
+        unigroupField = new CustomTextField(student.getUnigroup());
         unigroupField.setEditable(true); // Make it editable
         super.panel.add(unigroupField);
 
         super.panel.add(new JLabel("Average mark:"));
-        averageMarkField = new JTextField(student.getAveragemark().toString());
+        averageMarkField = new CustomTextField(student.getAveragemark().toString());
         averageMarkField.setEditable(true); // Make it editable
         super.panel.add(averageMarkField);
 
         super.panel.add(new JLabel("Practical Experience:"));
-        practicalExperienceField = new JTextField(student.getPracticalexperience());
+        int practicalExperience = 0;
+        if (student.getPracticalexperience() != null){
+            practicalExperience = student.getPracticalexperience();
+        }
+        practicalExperienceField = new CustomTextField(String.valueOf(practicalExperience));
         practicalExperienceField.setEditable(true); // Make it editable
         super.panel.add(practicalExperienceField);
 

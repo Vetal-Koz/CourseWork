@@ -1,10 +1,10 @@
 package org.example.entity;
 
 
-import lombok.ToString;
+import org.example.anotation.Table;
 
-@ToString(callSuper = true)
 
+@Table(name = "department")
 public class Department extends Subdivision{
 
     private String teachingfocus;
@@ -16,6 +16,8 @@ public class Department extends Subdivision{
         this.teachingfocus = teachingfocus;
         this.budget = budget;
     }
+
+
 
     public String getTeachingfocus() {
         return teachingfocus;
@@ -33,4 +35,8 @@ public class Department extends Subdivision{
         this.budget = budget;
     }
 
+    @Override
+    public String toString() {
+        return super.getObjname();
+    }
 }

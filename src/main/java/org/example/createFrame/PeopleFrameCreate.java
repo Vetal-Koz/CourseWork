@@ -1,8 +1,6 @@
 package org.example.createFrame;
 
-import org.example.UniqueNumberSearchApp;
-import org.example.entity.People;
-import org.example.updateFrame.UniObjectFrameUpdate;
+import org.example.dao.UniobjectDao;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -10,7 +8,6 @@ import java.awt.event.ActionListener;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.time.format.DateTimeFormatter;
 
 public class PeopleFrameCreate extends UniObjectFrameCreate {
 
@@ -51,7 +48,7 @@ public class PeopleFrameCreate extends UniObjectFrameCreate {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try (PreparedStatement ps = jdbcService.getConnection().prepareStatement("insert into people values (?,?,?,?)")){
-                    ps.setInt(1, UniqueNumberSearchApp.getTheBiggestIdFromUniobj()+1);
+                    ps.setInt(1, UniobjectDao.getTheBiggestIdFromUniobj()+1);
                     ps.setTimestamp(2, Timestamp.valueOf(dateOfBirthField.getText() + " 00:00:00"));
                     ps.setString(3, sexField.getText());
                     ps.setString(4, nationalityField.getText());
