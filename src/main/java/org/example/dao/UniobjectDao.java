@@ -214,6 +214,17 @@ public class UniobjectDao {
         }
     }
 
+    public static void updateUniobjectMajor(Uniobject uniobject, Integer majorId){
+        JdbcService jdbcService = new PostgresJdbcService();
+        try {
+            PreparedStatement preparedStatement = jdbcService.getConnection().prepareStatement("update uniobject set major = ? where uniqueno = ?");
+            preparedStatement.setInt(1 ,majorId);
+            preparedStatement.setInt(2, uniobject.getId());
+            preparedStatement.executeUpdate();
+        }catch (SQLException e){
+            throw new RuntimeException(e);
+        }
+    }
     public static void deleteObjectById(Integer id){
         JdbcService jdbcService = new PostgresJdbcService();
         List<String> tablesName = getNamesOfTablesByUniobjectId(id);

@@ -4,6 +4,8 @@ package org.example.entity;
 import lombok.NoArgsConstructor;
 import org.example.anotation.Table;
 
+import java.util.Objects;
+
 @NoArgsConstructor
 @Table(name="uniobject")
 public class Uniobject {
@@ -58,5 +60,18 @@ public class Uniobject {
     @Override
     public String toString() {
         return objname;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Uniobject uniobject = (Uniobject) o;
+        return Objects.equals(id, uniobject.id) && Objects.equals(objname, uniobject.objname)  && Objects.equals(classId, uniobject.classId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, objname,  classId);
     }
 }

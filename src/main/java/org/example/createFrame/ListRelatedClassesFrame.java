@@ -3,6 +3,7 @@ package org.example.createFrame;
 import lombok.Getter;
 import lombok.Setter;
 import org.example.dao.UniobjectDao;
+import org.example.entity.Folder;
 import org.example.entity.Uniobject;
 import org.example.util.UniobjectUtil;
 
@@ -31,19 +32,24 @@ public class ListRelatedClassesFrame extends JFrame {
 
     public UniObjectFrameCreate createFrame;
 
-    public ListRelatedClassesFrame(Integer major, DefaultMutableTreeNode node) {
+    public ListRelatedClassesFrame(Uniobject parentObject, DefaultMutableTreeNode node) {
         setTitle("List Frame");
         setSize(300, 200);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
-        this.major = major;
+        this.major = parentObject.getId();
         if (major == 0){
             relatedClasses = UniobjectDao.getAllClasses();
         }
 
-        if (node.getUserObject() instanceof Uniobject) {
+        if (!(parentObject instanceof Folder)) {
             relatedClasses = UniobjectDao.getRelatedClassesById(((Uniobject) node.getUserObject()).getClassId());
+            relatedClasses.add("Folder");
+        }else {
+            relatedClasses = UniobjectDao.getAllClasses();
         }
+
+
         listModel = new DefaultListModel<>();
 
         for (String element : relatedClasses) {

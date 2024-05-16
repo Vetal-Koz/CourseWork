@@ -5,20 +5,19 @@ import org.example.entity.Uniobject;
 
 import javax.swing.*;
 import javax.swing.event.MouseInputAdapter;
-import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.sql.SQLException;
 import java.util.List;
 
-public class NewApp extends JPanel {
+public class TreeApp extends JPanel {
 
     private DynamicTree treePanel;
 
     private List<Uniobject> uniobjectList;
 
-    public NewApp(List<Uniobject> uniobjectList) throws SQLException {
+    public TreeApp(List<Uniobject> uniobjectList) throws SQLException {
         super(new BorderLayout());
         this.uniobjectList = uniobjectList;
 
@@ -38,55 +37,31 @@ public class NewApp extends JPanel {
                 }
             }
         });
-//        populateTree(treePanel);
-
 
 
         treePanel.setPreferredSize(new Dimension(1000, 800));
         add(treePanel, BorderLayout.CENTER);
-//
-//        JPanel panel = new JPanel(new GridLayout(0,3));
-//
-//        add(panel, BorderLayout.SOUTH);
     }
 
-    public void populateTree(DynamicTree treePanel) throws SQLException {
-        DefaultMutableTreeNode p1, p2;
-
-        List<Uniobject> uniobjectList = UniobjectDao.searchInstanceWithMajorNull();
-        for (Uniobject uniobject1: uniobjectList){
-            System.out.println(uniobject1);
-            treePanel.addObject(null, uniobject1);
-        }
-
-    }
-    private static void createAndShowGUI() throws SQLException {
+    public static void createAndShowGUI() {
         Font defaultFont = new Font("Serif", Font.BOLD, 14);
         UIManager.put("TextField.font", defaultFont);
         List<Uniobject> uniobjectList = UniobjectDao.searchInstanceWithMajorNull();
         JFrame frame = new JFrame("DynamicTreeDemo");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        NewApp newContentPane = new NewApp(uniobjectList);
-        newContentPane.setOpaque(true);
-        frame.setContentPane(newContentPane);
+        TreeApp newContentPane = null;
+        try {
+            newContentPane = new TreeApp(uniobjectList);
+            newContentPane.setOpaque(true);
+            frame.setContentPane(newContentPane);
 
-        frame.setSize(1000, 1000);
-        frame.setLocationRelativeTo(null);
-        frame.pack();
-        frame.setVisible(true);
-    }
-
-
-    public static void main(String[] args) {
-        javax.swing.SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                try {
-                    createAndShowGUI();
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        });
+            frame.setSize(1000, 1000);
+            frame.setLocationRelativeTo(null);
+            frame.pack();
+            frame.setVisible(true);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

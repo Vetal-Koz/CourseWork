@@ -3,6 +3,7 @@ package org.example.controller;
 import lombok.Getter;
 import org.example.createFrame.ListRelatedClassesFrame;
 import org.example.dao.UniobjectDao;
+import org.example.entity.Folder;
 import org.example.entity.Uniobject;
 import org.example.util.UniobjectUtil;
 
@@ -30,14 +31,21 @@ public class PopUpMenu extends JPopupMenu {
     @Getter
     ListRelatedClassesFrame relatedClassesFrame;
     public PopUpMenu(Uniobject uniobject, DefaultMutableTreeNode node){
-        relatedClassesFrame = new ListRelatedClassesFrame(uniobject.getId(), node);
+        relatedClassesFrame = new ListRelatedClassesFrame(uniobject, node);
         JMenuItem updateItem = new JMenuItem("Update");
         JMenuItem insertItem = new JMenuItem("Insert");
         deleteItem = new JMenuItem("Delete");
 
 
         updateFrame = UniobjectUtil.generateFrameUpdateForUniObj(uniobject);
-        relatedClasses = UniobjectDao.getRelatedClassesById((uniobject.getClassId()));
+
+        if (!(uniobject instanceof Folder)){
+            relatedClasses = UniobjectDao.getRelatedClassesById((uniobject.getClassId()));
+
+        }
+        else {
+            relatedClasses = UniobjectDao.getAllClasses();
+        }
 
         updateItem.addActionListener(new ActionListener() {
             @Override
@@ -67,27 +75,11 @@ public class PopUpMenu extends JPopupMenu {
         add(deleteItem);
     }
 
-    public PopUpMenu(DefaultMutableTreeNode root){
-
-
-        JMenuItem insertItem = new JMenuItem("Insert");
-        relatedClasses = UniobjectDao.getAllClasses();
-        relatedClassesFrame = new ListRelatedClassesFrame(0, root);
-        insertItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-                relatedClassesFrame.setVisible(true);
-            }
-        });
-        add(insertItem);
-    }
 
     public PopUpMenu(){
         JMenuItem insertItem = new JMenuItem("Insert");
         relatedClasses = UniobjectDao.getAllClasses();
         relatedClassesFrame = new ListRelatedClassesFrame(0);
-        deleteItem = new JMenuItem("Delete");
         insertItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -96,6 +88,5 @@ public class PopUpMenu extends JPopupMenu {
             }
         });
         add(insertItem);
-        add(deleteItem);
     }
 }
