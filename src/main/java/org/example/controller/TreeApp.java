@@ -38,7 +38,7 @@ public class NewApp extends JPanel {
                 }
             }
         });
-        populateTree(treePanel);
+//        populateTree(treePanel);
 
 
 
