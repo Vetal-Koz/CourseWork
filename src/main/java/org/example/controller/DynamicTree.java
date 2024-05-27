@@ -1,5 +1,6 @@
 package org.example.controller;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.example.dao.UniobjectDao;
 import org.example.entity.Folder;
 import org.example.entity.Uniobject;
@@ -85,7 +86,9 @@ public class DynamicTree extends JPanel {
             if (node != null) {
                 if (!usedNodes.contains(node)) {
                     uniobjectSet = new HashSet<>(generateRelatedNode(node));
-                    usedNodes.add(node);
+                    if (!CollectionUtils.isEmpty(uniobjectSet)){
+                        usedNodes.add(node);
+                    }
                 }
             }
             for (Uniobject uniobject: uniobjectSet){

@@ -47,7 +47,7 @@ public class TreeApp extends JPanel {
         Font defaultFont = new Font("Serif", Font.BOLD, 14);
         UIManager.put("TextField.font", defaultFont);
         List<Uniobject> uniobjectList = UniobjectDao.searchInstanceWithMajorNull();
-        JFrame frame = new JFrame("DynamicTreeDemo");
+        JFrame frame = new JFrame("Course work");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         TreeApp newContentPane = null;
